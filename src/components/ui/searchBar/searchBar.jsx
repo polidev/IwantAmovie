@@ -1,8 +1,14 @@
-export default function SearchBar() {
+export default function SearchBar({ handleSubmit, inputRef }) {
   return (
-    <div>
-      <input type="text" placeholder="Search for a movie..." />
-      <button>Search</button>
-    </div>
+    <form onSubmit={handleSubmit} role="search">
+      <input
+        ref={inputRef}
+        id="search-input"
+        type="text"
+        placeholder="Search for a movie..."
+        required
+      />
+      <button type="submit">Search</button>
+    </form>
   );
 }
