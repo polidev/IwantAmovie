@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import SearchBar from "../components/ui/searchBar/searchBar.jsx";
 import ResultCard from "../components/ui/resultCard/resultCard.jsx";
 import Pagination from "../components/ui/pagination/pagination.jsx";
@@ -7,6 +7,12 @@ import Image from "../components/ui/image/image.jsx";
 import { getMovie } from "../api/tmdb.js";
 
 export default function Home() {
+  const [movies, setMovies] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const inputRef = useRef(null);
 
   const handleSubmit = (event) => {
