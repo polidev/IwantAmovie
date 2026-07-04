@@ -1,9 +1,7 @@
-import searchBar from "../components/ui/searchBar.jsx";
-import resultCard from "../components/ui/resultCard.jsx";
-import pagination from "../components/ui/pagination.jsx";
-import image from "../components/ui/image.jsx";
-
-import { fetchMovies } from "../api/tmdb.js";
+import searchBar from "../components/ui/searchBar/searchBar.jsx";
+import resultCard from "../components/ui/resultCard/resultCard.jsx";
+import pagination from "../components/ui/pagination/pagination.jsx";
+import image from "../components/ui/image/image.jsx";
 
 export default function Home() {
   return (
