@@ -19,7 +19,7 @@ export default function Home() {
     const inputText = inputRef.current?.value.trim();
     if (!inputText) return; // Exit if input is empty
 
-    setQuery(inputText.toLowerCase());
+    setQuery(inputText.toLowerCase().trim());
     setCurrentPage(1); // Reset to first page on new search
     inputRef.current.value = "";
   };

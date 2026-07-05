@@ -10,19 +10,44 @@ export default function Pagination({
     }
   };
 
+  let start = currentPage - 2;
+  let end = currentPage + 2;
+
+  if (start < 1) {
+    end += 1 - start;
+    start = 1;
+  }
+  if (end > totalPages) {
+    end = totalPages;
+    start = Math.max(1, end - 4);
+  }
+
+  const pages = [];
+  for (let i = start; i <= end; i++) pages.push(i);
+
   return (
     <div className="pagination-container">
-      {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-        (page) => (
-          <button
-            key={page}
-            className={page === currentPage ? "active" : ""}
-            onClick={() => handlePageChange(page)}
-          >
-            {page}
-          </button>
-        ),
-      )}
+      <button
+        disabled={currentPage <= 1}
+        onClick={() => handlePageChange(currentPage - 1)}
+      >
+        Prev
+      </button>
+      {pages.map((page) => (
+        <button
+          key={page}
+          className={page === currentPage ? "active" : ""}
+          onClick={() => handlePageChange(page)}
+        >
+          {page}
+        </button>
+      ))}
+      <button
+        disabled={currentPage >= totalPages}
+        onClick={() => handlePageChange(currentPage + 1)}
+      >
+        Next
+      </button>
     </div>
   );
 }

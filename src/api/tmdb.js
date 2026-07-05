@@ -15,7 +15,7 @@ fetch("https://api.themoviedb.org/3/authentication", options)
 
 // ************************************************************ Search
 
-export async function getMovie(movieName, page) {
+export async function getMovie(movieName, page = 1) {
   if (!movieName) return null;
 
   const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movieName)}&include_adult=false&language=en-US&page=${page}`;
