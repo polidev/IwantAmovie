@@ -7,28 +7,48 @@ import Image from "../components/ui/image/image.jsx";
 import { getMovie } from "../api/tmdb.js";
 
 export default function Home() {
+  const inputRef = useRef(null);
   const [movies, setMovies] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const inputRef = useRef(null);
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const inputText = inputRef.current?.value.trim();
-    console.log("Input text:", inputText); // Log the input text for debugging
-    if (inputText) {
-      getMovie(inputText.toLowerCase());
-      inputRef.current.value = "";
+    if (!inputText) return; // Exit if input is empty
+
+    setLoading(true);
+    try {
+      const data = await getMovie(inputText.toLowerCase());
+      setMovies(data.results || []);
+    } catch (error) {
+      console.error(error);
+      setMovies([]);
+    } finally {
+      setLoading(false);
     }
+    inputRef.current.value = "";
   };
 
   return (
     <>
       <main>
-        <SearchBar handleSubmit={handleSubmit} inputRef={inputRef} />
+        <section>
+          <SearchBar handleSubmit={handleSubmit} inputRef={inputRef} />
+        </section>
+        <section>
+          {movies !== [] &&
+            movies.map((movie) => <ResultCard key={movie.id} movie={movie} />)}
+        </section>
+        <section>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
+        </section>
       </main>
     </>
   );

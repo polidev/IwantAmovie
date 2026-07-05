@@ -26,7 +26,7 @@ export async function getMovie(movieName) {
   }
 
   const data = await response.json();
-  console.log("getMovie response:", data); // Log the response for debugging
+  console.log("getMovie response:", data.results); // Log the response for debugging
 
   return data;
 }
