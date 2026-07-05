@@ -15,10 +15,10 @@ fetch("https://api.themoviedb.org/3/authentication", options)
 
 // ************************************************************ Search
 
-export async function getMovie(movieName) {
+export async function getMovie(movieName, page = 1) {
   if (!movieName) return null;
 
-  const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movieName)}&include_adult=false&language=en-US&page=1`;
+  const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movieName)}&include_adult=false&language=en-US&page=${page}`;
   const response = await fetch(url, options);
 
   if (!response.ok) {
@@ -27,6 +27,7 @@ export async function getMovie(movieName) {
 
   const data = await response.json();
   console.log("getMovie response:", data.results); // Log the response for debugging
+  console.log("getMovie response:", data.total_pages); // Log the total pages for debugging
 
   return data;
 }
@@ -34,7 +35,7 @@ export async function getMovie(movieName) {
 export async function getMovieDetail(movieId) {
   if (!movieId) return null;
 
-  const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
+  const url = `https://api.themoviedb.org/3/movie/${encodeURIComponent(movieId)}?language=en-US`;
   const response = await fetch(url, options);
 
   if (!response.ok) {
