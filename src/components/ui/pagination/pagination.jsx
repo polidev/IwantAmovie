@@ -1,7 +1,12 @@
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
+export default function Pagination({
+  currentPage,
+  totalPages,
+  setCurrentPage,
+}) {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
+      console.log("Page changed to:", page);
+      setCurrentPage(page);
     }
   };
 
