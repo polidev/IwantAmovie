@@ -1,8 +1,8 @@
 export default function SearchBar({
   inputRef,
   handleSubmit,
-  inputValue,
-  onInputChange,
+  searchInput,
+  onSearchInput,
 }) {
   return (
     <form onSubmit={handleSubmit} role="search">
@@ -10,8 +10,8 @@ export default function SearchBar({
         ref={inputRef}
         id="search-input"
         type="text"
-        value={inputValue}
-        onChange={(event) => onInputChange(event.target.value)}
+        value={searchInput}
+        onChange={(event) => onSearchInput(event.target.value)}
         placeholder="Search for a movie..."
         required
       />

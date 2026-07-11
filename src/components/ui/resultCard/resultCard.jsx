@@ -2,7 +2,7 @@ import Image from "../image/image.jsx";
 
 export default function ResultCard({ movie }) {
   return (
-    <article className="">
+    <article className="" id={movie.id}>
       <h2>{movie.title}</h2>
       <p>{movie.overview}</p>
       <p>Release Date: {movie.release_date}</p>

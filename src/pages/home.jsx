@@ -8,34 +8,34 @@ import useDebounce from "../hooks/useDebounce.js";
 
 export default function Home() {
   const inputRef = useRef(null);
-  const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const [inputValue, setInputValue] = useState("");
-  const debouncedInputValue = useDebounce(inputValue, 400);
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebounce(searchInput, 400);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const inputText = inputRef.current?.value.trim();
     if (!inputText) return; // Exit if input is empty
 
-    setQuery(inputText.toLowerCase().trim());
+    setSearchQuery(inputText.toLowerCase().trim());
     setCurrentPage(1); // Reset to first page on new search
     inputRef.current.value = "";
   };
 
   useEffect(() => {
-    if (!query) return; // Exit if query is empty
+    if (!searchQuery) return; // Exit if query is empty
 
     const fetchMovies = async () => {
       setLoading(true);
 
       try {
-        const data = await getMovie(query, currentPage);
+        const data = await getMovie(searchQuery, currentPage);
         setMovies(data.results || []);
         setTotalPages(data.total_pages || 1);
       } catch (error) {
@@ -46,13 +46,21 @@ export default function Home() {
       }
     };
     fetchMovies();
-  }, [query, currentPage, inputValue]);
+  }, [searchQuery, currentPage]);
 
   useEffect(() => {
-    if (!debouncedInputValue) return;
-    setQuery(debouncedInputValue.toLowerCase().trim());
-    setCurrentPage(1); // Reset to first page on new search
-  }, [debouncedInputValue]);
+    if (!debouncedSearch) return;
+    setSearchQuery(debouncedSearch.toLowerCase().trim());
+    setCurrentPage(1);
+  }, [debouncedSearch]);
+
+  const handleCardClick = (event) => {
+    const card = event.target.closest("article");
+    if (!card) return;
+    const movieId = card.id;
+    console.log("Clicked movie ID:", movieId);
+    // Handle card click logic
+  };
 
   return (
     <>
@@ -61,11 +69,11 @@ export default function Home() {
           <SearchBar
             handleSubmit={handleSubmit}
             inputRef={inputRef}
-            inputValue={inputValue}
-            onInputChange={setInputValue}
+            searchInput={searchInput}
+            onSearchInput={setSearchInput}
           />
         </section>
-        <section>
+        <section id="movies-section" onClick={handleCardClick}>
           {movies !== [] &&
             movies.map((movie) => <ResultCard key={movie.id} movie={movie} />)}
         </section>
