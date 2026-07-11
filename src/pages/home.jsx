@@ -4,6 +4,7 @@ import ResultCard from "../components/ui/resultCard/resultCard.jsx";
 import Pagination from "../components/ui/pagination/pagination.jsx";
 
 import { getMovie } from "../api/tmdb.js";
+import useDebounce from "../hooks/useDebounce.js";
 
 export default function Home() {
   const inputRef = useRef(null);
@@ -13,6 +14,9 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const [inputValue, setInputValue] = useState("");
+  const debouncedInputValue = useDebounce(inputValue, 400);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,13 +46,24 @@ export default function Home() {
       }
     };
     fetchMovies();
-  }, [query, currentPage]);
+  }, [query, currentPage, inputValue]);
+
+  useEffect(() => {
+    if (!debouncedInputValue) return;
+    setQuery(debouncedInputValue.toLowerCase().trim());
+    setCurrentPage(1); // Reset to first page on new search
+  }, [debouncedInputValue]);
 
   return (
     <>
       <main>
         <section>
-          <SearchBar handleSubmit={handleSubmit} inputRef={inputRef} />
+          <SearchBar
+            handleSubmit={handleSubmit}
+            inputRef={inputRef}
+            inputValue={inputValue}
+            onInputChange={setInputValue}
+          />
         </section>
         <section>
           {movies !== [] &&
