@@ -30,23 +30,19 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!searchQuery) return; // Exit if query is empty
+    if (!searchQuery) return;
 
-    const fetchMovies = async () => {
-      setLoading(true);
-
-      try {
-        const data = await getMovie(searchQuery, currentPage);
+    setLoading(true);
+    getMovie(searchQuery, currentPage)
+      .then((data) => {
         setMovies(data.results || []);
         setTotalPages(data.total_pages || 1);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error(error);
         setMovies([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMovies();
+      })
+      .finally(() => setLoading(false));
   }, [searchQuery, currentPage]);
 
   useEffect(() => {

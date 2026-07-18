@@ -10,21 +10,16 @@ export default function Details() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchMovieDetail = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getMovieDetail(type, id);
-        setMovieDetail(data);
-      } catch (err) {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
+    getMovieDetail(type, id)
+      .then((data) => setMovieDetail(data))
+      .catch((err) => {
         console.error(err);
         setError("Failed to fetch movie details.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovieDetail();
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <div>Loading...</div>;
