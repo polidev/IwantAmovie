@@ -1,11 +1,11 @@
 export default function Pagination({
   currentPage,
   totalPages,
-  setCurrentPage,
+  onPageChange,
 }) {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+      onPageChange(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };

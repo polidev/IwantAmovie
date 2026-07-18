@@ -17,38 +17,68 @@ export default function Home() {
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearch = useDebounce(searchInput, 400);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const inputText = inputRef.current?.value.trim();
     if (!inputText) return;
-    setSearchQuery(inputText.toLowerCase().trim());
+    const query = inputText.toLowerCase().trim();
+    setSearchQuery(query);
     setCurrentPage(1);
-    inputRef.current.value = "";
-  };
-
-  useEffect(() => {
-    if (!searchQuery) return;
     setLoading(true);
-    getMovie(searchQuery, currentPage)
+    getMovie(query, 1)
       .then((data) => {
         setMovies(data.results || []);
         setTotalPages(Math.min(data.total_pages || 1, 500));
+        setError(null);
+        setLoading(false);
       })
-      .catch((error) => {
-        console.error(error);
-        setError("Something went wrong. Please try again.");
+      .catch((err) => {
+        console.error(err);
         setMovies([]);
+        setError("Something went wrong. Please try again.");
+        setLoading(false);
+      });
+    inputRef.current.value = "";
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setLoading(true);
+    getMovie(searchQuery, page)
+      .then((data) => {
+        setMovies(data.results || []);
+        setTotalPages(Math.min(data.total_pages || 1, 500));
+        setError(null);
+        setLoading(false);
       })
-      .finally(() => setLoading(false));
-  }, [searchQuery, currentPage]);
+      .catch((err) => {
+        console.error(err);
+        setMovies([]);
+        setError("Something went wrong. Please try again.");
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     if (!debouncedSearch) return;
-    setSearchQuery(debouncedSearch.toLowerCase().trim());
-    setCurrentPage(1);
+    const query = debouncedSearch.toLowerCase().trim();
+    getMovie(query, 1)
+      .then((data) => {
+        setSearchQuery(query);
+        setCurrentPage(1);
+        setMovies(data.results || []);
+        setTotalPages(Math.min(data.total_pages || 1, 500));
+        setError(null);
+      })
+      .catch((err) => {
+        console.error(err);
+        setMovies([]);
+        setError("Something went wrong. Please try again.");
+      });
   }, [debouncedSearch]);
 
-  const hasSearched = searchQuery !== "";
+  const displayQuery = debouncedSearch || searchQuery;
+  const hasSearched = debouncedSearch !== "" || searchQuery !== "";
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -59,7 +89,7 @@ export default function Home() {
           </h1>
           <p className="text-body max-w-lg mx-auto">
             {hasSearched
-              ? `Showing results for "${searchQuery}"`
+              ? `Showing results for "${displayQuery}"`
               : "Search thousands of movies and series from TMDB"}
           </p>
         </div>
@@ -110,7 +140,7 @@ export default function Home() {
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                setCurrentPage={setCurrentPage}
+                onPageChange={handlePageChange}
               />
             )}
           </>

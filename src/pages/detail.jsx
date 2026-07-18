@@ -11,15 +11,17 @@ export default function Details() {
 
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
-    setError(null);
     getMovieDetail(type, id)
-      .then((data) => setMovieDetail(data))
+      .then((data) => {
+        setMovieDetail(data);
+        setError(null);
+        setLoading(false);
+      })
       .catch((err) => {
         console.error(err);
         setError("Failed to load details. Please try again.");
-      })
-      .finally(() => setLoading(false));
+        setLoading(false);
+      });
   }, [id, type]);
 
   if (loading) {
