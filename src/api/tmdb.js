@@ -61,3 +61,18 @@ export async function getMovieDetail(type = "movie", movieId) {
 
   return data;
 }
+
+/**
+ * Builds a full TMDB image URL from a relative path.
+ *
+ * @param {string|null} path   - Relative image path (e.g. "/abc123.jpg")
+ * @param {string}       [size="w500"] - Image size (w500, w780, original, etc.)
+ * @returns {string|null} Full URL or null if path is falsy
+ *
+ * @example
+ *   getImageUrl("/abc123.jpg", "w500")
+ *   // → "https://image.tmdb.org/t/p/w500/abc123.jpg"
+ */
+export function getImageUrl(path, size = "w500") {
+  return path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
+}
