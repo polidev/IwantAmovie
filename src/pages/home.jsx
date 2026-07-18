@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router";
 import SearchBar from "../components/ui/searchBar/searchBar.jsx";
 import ResultCard from "../components/ui/resultCard/resultCard.jsx";
 import Pagination from "../components/ui/pagination/pagination.jsx";
@@ -75,7 +76,14 @@ export default function Home() {
         </section>
         <section id="movies-section" onClick={handleCardClick}>
           {movies !== [] &&
-            movies.map((movie) => <ResultCard key={movie.id} movie={movie} />)}
+            movies.map((movie) => (
+              <Link
+                key={movie.id}
+                to={`/${movie.media_type || "movie"}/${movie.id}`}
+              >
+                <ResultCard key={movie.id} movie={movie} />
+              </Link>
+            ))}
         </section>
         <section>
           <Pagination

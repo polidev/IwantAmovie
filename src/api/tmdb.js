@@ -31,6 +31,7 @@ export async function getMovie(movieName, page = 1) {
   }
 
   const data = await response.json();
+  console.log("Fetched movie data:", data); // Debugging log
 
   return data;
 }
@@ -45,10 +46,10 @@ export async function getMovie(movieName, page = 1) {
  *   const movie = await getMovieDetail(550);
  *   // movie.title, movie.overview, movie.genres, etc.
  */
-export async function getMovieDetail(movieId) {
+export async function getMovieDetail(type = "movie", movieId) {
   if (!movieId) return null;
 
-  const url = `https://api.themoviedb.org/3/movie/${encodeURIComponent(movieId)}?language=en-US`;
+  const url = `https://api.themoviedb.org/3/${type}/${encodeURIComponent(movieId)}?language=en-US`;
   const response = await fetch(url, options);
 
   if (!response.ok) {
@@ -56,6 +57,7 @@ export async function getMovieDetail(movieId) {
   }
 
   const data = await response.json();
+  console.log("Fetched movie detail:", data); // Debugging log
 
   return data;
 }
