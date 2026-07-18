@@ -27,14 +27,14 @@ export default function Pagination({
 
   return (
     <div className="pagination-container">
-      <button
+      <button type="button"
         disabled={currentPage <= 1}
         onClick={() => handlePageChange(currentPage - 1)}
       >
         Prev
       </button>
       {pages.map((page) => (
-        <button
+        <button type="button"
           key={page}
           className={page === currentPage ? "active" : ""}
           onClick={() => handlePageChange(page)}
@@ -42,7 +42,7 @@ export default function Pagination({
           {page}
         </button>
       ))}
-      <button
+      <button type="button"
         disabled={currentPage >= totalPages}
         onClick={() => handlePageChange(currentPage + 1)}
       >
